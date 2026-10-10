@@ -8,7 +8,7 @@ use App\Repository\PropertyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AgencyPropertyController extends AbstractController
@@ -42,7 +42,7 @@ class AgencyPropertyController extends AbstractController
             $this->em->persist($property);
             $this->em->flush();
             $this->addFlash('success', 'Bien créé avec succès');
-            return $this->redirectToRoute('app.admin.property.index');
+            return $this->redirectToRoute('app.agency.property.index');
         }
 
         return $this->render('agency/property/new.html.twig', [

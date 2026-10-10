@@ -11,18 +11,19 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[UniqueEntity(fields: ["title"], message: "Un autre bien possède déjà ce titre, veuillez en choisir un autre.")]
 #[Vich\Uploadable]
 class Property
 {
     const HEATING = [
-        0 => 'Bois',
-        1 => 'Electrique',
+        0 => 'Electrique',
+        1 => 'Gaz',
         2 => 'Fioul',
-        3 => 'Gaz'
+        3 => 'Autre'
     ];
     const POSTAL_CODE_REGEX = '/^[0-9]{5}$/';
     
@@ -101,6 +102,7 @@ class Property
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
+        $this->updatedAt = new DateTimeImmutable();
         $this->options = new ArrayCollection();
         $this->pictures = new ArrayCollection();
     }
@@ -356,6 +358,12 @@ class Property
         }
 
         return $this;
+    }
+
+    #[ORM\PreUpdate]
+    public function touchUpdatedAt(): void
+    {
+        $this->updatedAt = new DateTimeImmutable();
     }
 
     public function getPictureFiles()

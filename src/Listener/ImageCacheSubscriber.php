@@ -3,33 +3,25 @@
 namespace App\Listener;
 
 use App\Entity\Picture;
-use Doctrine\Common\EventSubscriber;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\Events;
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Templating\Helper\UploaderHelper;
 
-class ImageCacheSubscriber implements EventSubscriber
+#[AsDoctrineListener(event: Events::preRemove)]
+#[AsDoctrineListener(event: Events::preUpdate)]
+class ImageCacheSubscriber
 {
-    private $cacheManager;
-    private $uploaderHelper;
-
-    public function __construct(CacheManager $cacheManager, UploaderHelper $uploaderHelper)
-    {
-        $this->cacheManager = $cacheManager;
-        $this->uploaderHelper = $uploaderHelper;
+    public function __construct(
+        private CacheManager $cacheManager,
+        private UploaderHelper $uploaderHelper,
+    ) {
     }
 
-    public function getSubscribedEvents()
-    {
-        return [
-            'preRemove',
-            'preUpdate'
-        ];
-    }
-
-    public function preRemove(LifecycleEventArgs $args)
+    public function preRemove(PreRemoveEventArgs $args): void
     {
         $entity = $args->getObject();
 
@@ -39,7 +31,7 @@ class ImageCacheSubscriber implements EventSubscriber
         $this->cacheManager->remove($this->uploaderHelper->asset($entity, 'imageFile'));
     }
 
-    public function preUpdate(PreUpdateEventArgs $args)
+    public function preUpdate(PreUpdateEventArgs $args): void
     {
         $entity = $args->getObject();
 
