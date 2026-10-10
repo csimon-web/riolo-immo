@@ -48,12 +48,39 @@ To get a local copy up and running follow these simple steps.
    ```sh
    composer install
    ```
-3. Create a `.env.local` file at the root of the project (it is ignored by Git) to override the default settings of `.env`. Set your database username, password and server version:
-   ```dotenv
-   DATABASE_URL="mysql://USER:PASSWORD@127.0.0.1:3306/riolo_immo_dev?serverVersion=mariadb-11.4.2&charset=utf8mb4"
-   APP_SECRET=a_random_string
-   ```
-   For a MySQL server, use `serverVersion=8.0.32` (adapt to your version). You can generate a secret with `php -r "echo bin2hex(random_bytes(16));"`.
+3. Create a `.env.local` file at the root of the project (it is ignored by Git). It overrides the default settings of `.env` and holds your local configuration.
+
+   3.1 Customize `APP_SECRET`. Generate a random string with this command:
+
+      ```sh
+      php -r "echo bin2hex(random_bytes(16));"
+      ```
+
+   Then use it as the value in `.env.local`:
+
+      ```dotenv
+      APP_SECRET=your_generated_string
+      ```
+
+   3.2 Customize the database settings. Set your database username, password, database name and server version:
+
+      ```dotenv
+      DATABASE_URL="mysql://USER:PASSWORD@127.0.0.1:3306/riolo_immo_dev?serverVersion=mariadb-13.0.2&charset=utf8mb4"
+      ```
+
+   Replace `13.0.2` with the version of your server (`SELECT VERSION();` in the `mariadb` client). For a MySQL server, use `serverVersion=8.0.32` (adapt to your version). If your local `root` account has no password, leave it empty: `mysql://root:@127.0.0.1:3306/...`.
+
+   3.3 (Optional) Customize the mailer. By default, `MAILER_DSN=null://null` discards emails. To test the contact form, set your own SMTP settings (for example a [Mailtrap](https://mailtrap.io) sandbox):
+
+      ```dotenv
+      MAILER_DSN=smtp://USERNAME:PASSWORD@sandbox.smtp.mailtrap.io:2525
+      ```
+
+   Emails are sent through Symfony Messenger, so run a worker in a separate terminal to process them:
+
+      ```sh
+      php bin/console messenger:consume async -vv
+      ```
 4. Create the database and its tables:
    ```sh
    php bin/console doctrine:database:create
@@ -75,12 +102,6 @@ To get a local copy up and running follow these simple steps.
    Without the Symfony CLI: `php -S 127.0.0.1:8000 -t public`
 8. Open https://127.0.0.1:8000 in your browser (or the port displayed by the Symfony server).
 
-### Optional: contact form emails
-
-By default, `MAILER_DSN=null://null` discards emails. To test the contact form, set a `MAILER_DSN` in `.env.local` (for example a [Mailtrap](https://mailtrap.io) sandbox). Emails are sent through Symfony Messenger, so run a worker in a separate terminal:
-```sh
-php bin/console messenger:consume async -vv
-```
 
 
 <!-- USAGE EXAMPLES -->
