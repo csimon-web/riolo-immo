@@ -3,7 +3,7 @@
 {% block title property.title %}
 
 {% block body %}
-    <div class="jumbotron">
+    <div class="p-5 mb-4 bg-light rounded-3">
         <div class="container">
 
             {% for message in app.flashes('success') %}
@@ -48,7 +48,7 @@
                                     <div class="col">{{ form_row(form.emailAddress) }}</div>
                                 </div>
                             {{ form_rest(form) }}
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <button class="btn btn-primary">Envoyer</button>
                                 </div>
                             {{ form_end(form) }}

@@ -3,10 +3,10 @@
 {% block title 'Tous nos biens' %}
 
 {% block body %}
-    <div class="jumbotron">
+    <div class="p-5 mb-4 bg-light rounded-3">
         <div class="container">
             {{ form_start(form) }}
-                <div class="form-row align-items-end">
+                <div class="row g3 align-items-end">
                     <div class="col">
                         {{ form_row(form.minSurface) }}
                     </div>
@@ -17,7 +17,7 @@
                         {{ form_row(form.options) }}
                     </div>
                     <div class="col">
-                        <div class="form-group">
+                        <div class="mb-3">
                             <button class="btn btn-primary">Rechercher</button>
                         </div>
                     </div>
@@ -36,7 +36,7 @@
             {% endfor %}
         </div>
 
-        <div class="pagination">
+        <div class="d-flex justify-content-center mt-4 mb-4">
             {{ knp_pagination_render(properties) }}
         </div>
     </div>

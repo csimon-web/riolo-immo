@@ -19,7 +19,7 @@ This project was realized during my training as a web applications developer for
 ### Built With
 
 - Html 5, Css 3, Php 8
-- Symfony 6.4 (LTS), Doctrine ORM, Webpack Encore, Bootstrap 4
+- Symfony 6.4 (LTS), Doctrine ORM, Webpack Encore, Bootstrap 5
 - MariaDB / MySQL
 - Git, Github
 - VS Code
