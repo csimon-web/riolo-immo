@@ -20,6 +20,9 @@ This project was realized during my training as a web applications developer for
 
 - Html 5, Css 3, Php 8
 - Symfony 6.4 (LTS), Doctrine ORM, Webpack Encore, Bootstrap 5
+- jQuery, Select2, Slick (front-end plugins)
+- Leaflet and OpenStreetMap (maps)
+- Géoplateforme geocoding API (address autocomplete and search by distance)
 - MariaDB / MySQL
 - Git, Github
 - VS Code
@@ -36,6 +39,7 @@ To get a local copy up and running follow these simple steps.
 * MySQL or MariaDB (tested with MariaDB 13.0)
 * Node.js and npm
 * Symfony CLI (optional, PHP's built-in server also works)
+* An internet connection: the address autocomplete and the maps rely on external services (no API key required)
 
 ### Installation
  
@@ -111,6 +115,10 @@ You can use the web application as a default visitor at the root address.
 
 To manage the properties, log in at `/login` and use the agency area at `/agency`. There you can add new properties and options, and edit or delete existing ones.
 
+Visitors can filter the properties by surface, budget, options, and by distance from an address, using the search form on the `/biens` page.
+
+The sample properties have no coordinates. To see the map on a property page and to test the search by distance, edit a property in the agency area, start typing its address and pick one of the suggestions: the city, the postal code and the coordinates are then filled in automatically.
+
 With the sample data, the local account is `admin` / `admin`. This account is for local development only: never use it in production.
 
 
@@ -118,7 +126,7 @@ With the sample data, the local account is `admin` / `admin`. This account is fo
 <!-- CONTACT -->
 ## Contact
 
-Christophe Simon: [personnal website](https://www.csimon.info)
+Christophe Simon: [personal website](https://www.csimon.info)
 
 Project Link: [https://github.com/csimon-web/riolo-immo](https://github.com/csimon-web/riolo-immo)
 
@@ -127,6 +135,8 @@ Project Link: [https://github.com/csimon-web/riolo-immo](https://github.com/csim
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
 
+- Address autocomplete and geocoding: [Géoplateforme geocoding API](https://geoservices.ign.fr/) (IGN)
+- Maps: [Leaflet](https://leafletjs.com/) with tiles from [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors
 - This readme version is a customized version of this [github repository](https://github.com/NicolasBrondin/basic-readme-template) by NicolasBrondin
 
 

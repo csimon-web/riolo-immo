@@ -8,6 +8,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -62,6 +63,8 @@ class PropertyType extends AbstractType
                     'oninput' => "this.setCustomValidity('')"  // Reset the customized message to enable a re-validation during editing
                 ]
             ])
+            ->add('lat', HiddenType::class, ['required' => false])
+            ->add('lng', HiddenType::class, ['required' => false])
             ->add('sold')
         ;
     }

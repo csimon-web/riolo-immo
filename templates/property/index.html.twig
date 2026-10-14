@@ -6,7 +6,7 @@
     <div class="p-5 mb-4 bg-light rounded-3">
         <div class="container">
             {{ form_start(form) }}
-                <div class="row g3 align-items-end">
+                <div class="row g-3 align-items-start">
                     <div class="col">
                         {{ form_row(form.minSurface) }}
                     </div>
@@ -17,6 +17,12 @@
                         {{ form_row(form.options) }}
                     </div>
                     <div class="col">
+                        {{ form_row(form.city) }}
+                    </div>
+                    <div class="col">
+                        {{ form_row(form.distance) }}
+                    </div>
+                    <div class="col-auto ms-auto">
                         <div class="mb-3">
                             <button class="btn btn-primary">Rechercher</button>
                         </div>

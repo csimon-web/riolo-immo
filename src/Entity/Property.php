@@ -99,6 +99,12 @@ class Property
     ])]
     private $pictureFiles;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $lat = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?float $lng = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -379,6 +385,30 @@ class Property
             $this->addPicture($picture);
         }
         $this->pictureFiles = $pictureFiles;
+        return $this;
+    }
+
+    public function getLat(): ?float
+    {
+        return $this->lat;
+    }
+
+    public function setLat(float $lat): static
+    {
+        $this->lat = $lat;
+
+        return $this;
+    }
+
+    public function getLng(): ?float
+    {
+        return $this->lng;
+    }
+
+    public function setLng(float $lng): static
+    {
+        $this->lng = $lng;
+
         return $this;
     }
 }
