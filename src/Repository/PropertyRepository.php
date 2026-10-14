@@ -53,8 +53,18 @@ class PropertyRepository extends ServiceEntityRepository
             }
         }
 
+        // Distance filter: the search radius is applied around the selected address
+        if (null !== $search->getLat() && null !== $search->getLng() && $search->getDistance()) {
+            $ids = $this->findIdsWithinDistance($search->getLat(), $search->getLng(), $search->getDistance());
+            $query = $query
+                ->andWhere('p.id IN (:ids)')
+                ->setParameter('ids', $ids ?: [0]); // [0] makes the query return nothing when no property matches
+        }
+
         return $query->getQuery();
     }
+
+
 
     /**
      * @return Property[] Returns an array of Property objects
@@ -66,6 +76,28 @@ class PropertyRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * Returns the ids of the properties located within $distance kilometers of the given point.
+     *
+     * @return int[]
+     */
+    private function findIdsWithinDistance(float $lat, float $lng, int $distance): array
+    {
+        // Spherical law of cosines, earth radius of 6371 km
+        $sql = 'SELECT id FROM property
+                WHERE lat IS NOT NULL AND lng IS NOT NULL
+                AND 6371 * ACOS(LEAST(1, GREATEST(-1,
+                    :cosLat * COS(RADIANS(lat)) * COS(RADIANS(lng) - :lngRad) + :sinLat * SIN(RADIANS(lat))
+                ))) <= :distance';
+
+        return $this->getEntityManager()->getConnection()->executeQuery($sql, [
+            'cosLat' => cos(deg2rad($lat)),
+            'sinLat' => sin(deg2rad($lat)),
+            'lngRad' => deg2rad($lng),
+            'distance' => $distance,
+        ])->fetchFirstColumn();
     }
 
     private function findVisibleQuery(): QueryBuilder
