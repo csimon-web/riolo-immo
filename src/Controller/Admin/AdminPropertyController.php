@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Agency;
+namespace App\Controller\Admin;
 
 use App\Entity\Property;
 use App\Form\PropertyType;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class AgencyPropertyController extends AbstractController
+class AdminPropertyController extends AbstractController
 {
     private $repo;
     private $em;
@@ -22,15 +22,15 @@ class AgencyPropertyController extends AbstractController
         $this->em = $em;
     }
 
-    #[Route('/agency', name: 'app.agency.property.index')]
+    #[Route('/admin', name: 'app.admin.property.index')]
     public function index(): Response
     {
         $properties = $this->repo->findAll();
 
-        return $this->render('agency/property/index.html.twig', compact('properties'));
+        return $this->render('admin/property/index.html.twig', compact('properties'));
     }
 
-    #[Route('/agency/property', name: 'app.agency.property.new', methods:['GET', 'POST'])]
+    #[Route('/admin/property', name: 'app.admin.property.new', methods:['GET', 'POST'])]
     public function new(Request $request)
     {
         // $this->denyAccessUnlessGranted('edit');
@@ -42,16 +42,16 @@ class AgencyPropertyController extends AbstractController
             $this->em->persist($property);
             $this->em->flush();
             $this->addFlash('success', 'Bien créé avec succès');
-            return $this->redirectToRoute('app.agency.property.index');
+            return $this->redirectToRoute('app.admin.property.index');
         }
 
-        return $this->render('agency/property/new.html.twig', [
+        return $this->render('admin/property/new.html.twig', [
             'property' => $property,
             'form'     => $form->createView()
         ]);
     }
 
-    #[Route('/agency/property/{id}', name: 'app.agency.property.delete', methods:['DELETE'])]
+    #[Route('/admin/property/{id}', name: 'app.admin.property.delete', methods:['DELETE'])]
     public function delete(Property $property, Request $request)
     {
         // $this->denyAccessUnlessGranted('delete', $property);
@@ -61,10 +61,10 @@ class AgencyPropertyController extends AbstractController
             $this->addFlash('success', 'Bien supprimé avec succès');
             // dump('Condition remplie');
         }
-        return $this->redirectToRoute('app.agency.property.index');
+        return $this->redirectToRoute('app.admin.property.index');
     }
 
-    #[Route('/agency/property/{id}', name: 'app.agency.property.edit', methods:['GET', 'PATCH'])]
+    #[Route('/admin/property/{id}', name: 'app.admin.property.edit', methods:['GET', 'PATCH'])]
     public function edit(Property $property, Request $request)
     {
         // $this->denyAccessUnlessGranted('edit', $property);
@@ -76,10 +76,10 @@ class AgencyPropertyController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
             $this->addFlash('success', 'Bien modifié avec succès');
-            return $this->redirectToRoute('app.agency.property.index');
+            return $this->redirectToRoute('app.admin.property.index');
         }
 
-        return $this->render('agency/property/edit.html.twig', [
+        return $this->render('admin/property/edit.html.twig', [
             'property' => $property,
             'form'     => $form->createView()
         ]);

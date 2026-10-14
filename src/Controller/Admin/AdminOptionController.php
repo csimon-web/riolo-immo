@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Agency;
+namespace App\Controller\Admin;
 
 use App\Entity\Option;
 use App\Form\OptionType;
@@ -11,18 +11,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/agency/option')]
-class AgencyOptionController extends AbstractController
+#[Route('/admin/option')]
+class AdminOptionController extends AbstractController
 {
-    #[Route('/', name: 'app.agency.option.index', methods: ['GET'])]
+    #[Route('/', name: 'app.admin.option.index', methods: ['GET'])]
     public function index(OptionRepository $optionRepository): Response
     {
-        return $this->render('agency/option/index.html.twig', [
+        return $this->render('admin/option/index.html.twig', [
             'options' => $optionRepository->findAll(),
         ]);
     }
 
-    #[Route('/new', name: 'app.agency.option.new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app.admin.option.new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $option = new Option();
@@ -33,16 +33,16 @@ class AgencyOptionController extends AbstractController
             $entityManager->persist($option);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app.agency.option.index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app.admin.option.index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('agency/option/new.html.twig', [
+        return $this->render('admin/option/new.html.twig', [
             'option' => $option,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app.agency.option.edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app.admin.option.edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Option $option, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(OptionType::class, $option);
@@ -51,16 +51,16 @@ class AgencyOptionController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app.agency.option.index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app.admin.option.index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('agency/option/edit.html.twig', [
+        return $this->render('admin/option/edit.html.twig', [
             'option' => $option,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app.agency.option.delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app.admin.option.delete', methods: ['POST'])]
     public function delete(Request $request, Option $option, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$option->getId(), $request->request->get('_token'))) {
@@ -68,6 +68,6 @@ class AgencyOptionController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app.agency.option.index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app.admin.option.index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -12,7 +12,7 @@
                 {% for picture in property.pictures %}
                     <div class="picture-thumb">
                         <img src="{{ vich_uploader_asset(picture, 'imageFile') | imagine_filter('thumb') }}" width="100" alt="">
-                        <a href="{{ path('app.agency.picture.delete', {id: picture.id}) }}" class="btn btn-danger" data-delete data-token="{{ csrf_token('delete' ~ picture.id) }}">Supprimer</a>
+                        <a href="{{ path('app.admin.picture.delete', {id: picture.id}) }}" class="btn btn-danger" data-delete data-token="{{ csrf_token('delete' ~ picture.id) }}">Supprimer</a>
                     </div>
                 {% endfor %}
             </div>
