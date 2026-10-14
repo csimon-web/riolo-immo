@@ -25,9 +25,9 @@
                     <tr>
                         <td>{{ option.name }}</td>
                         <td>
-                            <a href="{{ path('app.agency.option.edit', {id: option.id}) }}" class="btn btn-secondary">Editer</a>
+                            <a href="{{ path('app.admin.option.edit', {id: option.id}) }}" class="btn btn-secondary">Editer</a>
 
-                            <form method="post" action="{{ path('app.agency.option.delete', {id: option.id}) }}" class="d-inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
+                            <form method="post" action="{{ path('app.admin.option.delete', {id: option.id}) }}" class="d-inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ option.id) }}">
                                 <button class="btn btn-danger">Supprimer</button>
                             </form>
@@ -39,7 +39,7 @@
         </table>
 
         <div class="text-end">
-            <a href="{{ path('app.agency.option.new') }}" class="btn btn-primary">Créer une nouvelle option</a>
+            <a href="{{ path('app.admin.option.new') }}" class="btn btn-primary">Créer une nouvelle option</a>
         </div>
 
     </div>

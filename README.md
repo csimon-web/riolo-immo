@@ -113,7 +113,7 @@ To get a local copy up and running follow these simple steps.
 
 You can use the web application as a default visitor at the root address.
 
-To manage the properties, log in at `/login` and use the agency area at `/agency`. There you can add new properties and options, and edit or delete existing ones.
+To manage the properties, log in at `/login` and use the admin area at `/admin`. Agents can add, edit and delete properties and options; administrators have the same rights, and will also manage the agents' accounts.
 
 Visitors can filter the properties by surface, budget, options, and by distance from an address, using the search form on the `/biens` page.
 

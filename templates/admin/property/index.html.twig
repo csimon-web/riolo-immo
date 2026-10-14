@@ -25,9 +25,9 @@
                     <tr>
                         <td>{{ property.title }}</td>
                         <td>
-                            <a href="{{ path('app.agency.property.edit', {id: property.id}) }}" class="btn btn-secondary">Editer</a>
+                            <a href="{{ path('app.admin.property.edit', {id: property.id}) }}" class="btn btn-secondary">Editer</a>
 
-                            <form method="post" action="{{ path('app.agency.property.delete', {id: property.id}) }}" class="d-inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
+                            <form method="post" action="{{ path('app.admin.property.delete', {id: property.id}) }}" class="d-inline-block" onsubmit="return confirm('Êtes vous vraiment sûr ?')">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ property.id) }}">
                                 <button class="btn btn-danger">Supprimer</button>
@@ -40,7 +40,7 @@
         </table>
 
         <div class="text-end">
-            <a href="{{ path('app.agency.property.new') }}" class="btn btn-primary">Créer un nouveau bien</a>
+            <a href="{{ path('app.admin.property.new') }}" class="btn btn-primary">Créer un nouveau bien</a>
         </div>
 
     </div>
