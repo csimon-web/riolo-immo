@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use DateTimeImmutable;
+use App\Repository\PropertyRepository;
 use Cocur\Slugify\Slugify;
+use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\PropertyRepository;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
@@ -81,6 +81,10 @@ class Property
 
     #[ORM\Column(type: 'boolean', options: ["default" => false])]
     private ?bool $sold = false;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $assignedAgent = null;
 
     #[ORM\Column]
     private ?DateTimeImmutable $createdAt = null;
@@ -273,6 +277,18 @@ class Property
     public function setSold(bool $sold): static
     {
         $this->sold = $sold;
+
+        return $this;
+    }
+
+    public function getAssignedAgent(): ?User
+    {
+        return $this->assignedAgent;
+    }
+
+    public function setAssignedAgent(User $assignedAgent): static
+    {
+        $this->assignedAgent = $assignedAgent;
 
         return $this;
     }

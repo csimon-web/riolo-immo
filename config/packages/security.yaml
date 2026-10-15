@@ -7,7 +7,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: username
+                property: email
         # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
@@ -39,9 +39,16 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin/users, roles: ROLE_ADMIN }
-        - { path: ^/admin, roles: ROLE_AGENT }
-        # - { path: ^/, roles: ROLE_USER }
+        # User management: administrators only
+        - { path: ^/administration/utilisateurs, roles: ROLE_ADMIN }
+        - { path: ^/administration/utilisateur/, roles: ROLE_ADMIN }
+
+        # Option management: administrators only
+        - { path: ^/administration/options, roles: ROLE_ADMIN }
+        - { path: ^/administration/option/, roles: ROLE_ADMIN }
+
+        # Other administration pages: agents and administrators
+        - { path: ^/administration, roles: ROLE_AGENT }
 
 when@test:
     security:
