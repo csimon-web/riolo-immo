@@ -11,20 +11,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin/option')]
+#[Route('/administration')]
 class AdminOptionController extends AbstractController
 {
-    #[Route('/', name: 'app.admin.option.index', methods: ['GET'])]
+    #[Route('/options', name: 'app.admin.option.index', methods: ['GET'])]
     public function index(OptionRepository $optionRepository): Response
     {
+        $options = $optionRepository->findAll();
+
         return $this->render('admin/option/index.html.twig', [
-            'options' => $optionRepository->findAll(),
+            'options' => $options,
         ]);
     }
 
-    #[Route('/new', name: 'app.admin.option.new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    #[Route('/option/nouvelle', name: 'app.admin.option.new', methods: ['GET', 'POST'])]
+    public function new(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response {
         $option = new Option();
         $form = $this->createForm(OptionType::class, $option);
         $form->handleRequest($request);
@@ -33,7 +37,13 @@ class AdminOptionController extends AbstractController
             $entityManager->persist($option);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app.admin.option.index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Option créée avec succès');
+
+            return $this->redirectToRoute(
+                'app.admin.option.index',
+                [],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->render('admin/option/new.html.twig', [
@@ -42,16 +52,30 @@ class AdminOptionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app.admin.option.edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Option $option, EntityManagerInterface $entityManager): Response
-    {
+    #[Route(
+        '/option/{id}/modification',
+        name: 'app.admin.option.edit',
+        methods: ['GET', 'POST'],
+        requirements: ['id' => '\d+']
+    )]
+    public function edit(
+        Request $request,
+        Option $option,
+        EntityManagerInterface $entityManager
+    ): Response {
         $form = $this->createForm(OptionType::class, $option);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app.admin.option.index', [], Response::HTTP_SEE_OTHER);
+            $this->addFlash('success', 'Option modifiée avec succès');
+
+            return $this->redirectToRoute(
+                'app.admin.option.index',
+                [],
+                Response::HTTP_SEE_OTHER
+            );
         }
 
         return $this->render('admin/option/edit.html.twig', [
@@ -60,14 +84,31 @@ class AdminOptionController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app.admin.option.delete', methods: ['POST'])]
-    public function delete(Request $request, Option $option, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$option->getId(), $request->request->get('_token'))) {
+    #[Route(
+        '/option/{id}',
+        name: 'app.admin.option.delete',
+        methods: ['POST'],
+        requirements: ['id' => '\d+']
+    )]
+    public function delete(
+        Request $request,
+        Option $option,
+        EntityManagerInterface $entityManager
+    ): Response {
+        if ($this->isCsrfTokenValid(
+            'delete' . $option->getId(),
+            $request->request->get('_token')
+        )) {
             $entityManager->remove($option);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Option supprimée avec succès');
         }
 
-        return $this->redirectToRoute('app.admin.option.index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute(
+            'app.admin.option.index',
+            [],
+            Response::HTTP_SEE_OTHER
+        );
     }
 }

@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title 'Gérer les utilisateurs' %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        <h1>Gérer les utilisateurs</h1>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Adresse e-mail</th>
+                    <th>Rôle(s)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.firstName }}</td>
+                        <td>{{ user.lastName }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if 'ROLE_ADMIN' in user.roles %}
+                                Administrateur
+                            {% elseif 'ROLE_AGENT' in user.roles %}
+                                Agent immobilier
+                            {% else %}
+                                Utilisateur
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a
+                                href="{{ path('app.admin.user.edit', {id: user.id}) }}"
+                                class="btn btn-secondary"
+                            >
+                                Modifier
+                            </a>
+
+                            {% if app.user and app.user.id != user.id %}
+                                <form
+                                    method="post"
+                                    action="{{ path('app.admin.user.delete', {id: user.id}) }}"
+                                    class="d-inline-block"
+                                    onsubmit="return confirm('Êtes-vous vraiment sûr de vouloir supprimer cet utilisateur ?')"
+                                >
+                                    <input
+                                        type="hidden"
+                                        name="_token"
+                                        value="{{ csrf_token('delete' ~ user.id) }}"
+                                    >
+                                    <button class="btn btn-danger">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            Aucun utilisateur trouvé.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="text-end">
+            <a
+                href="{{ path('app.admin.user.new') }}"
+                class="btn btn-primary"
+            >
+                Créer un nouvel utilisateur
+            </a>
+        </div>
+
+    </div>
+{% endblock %}
